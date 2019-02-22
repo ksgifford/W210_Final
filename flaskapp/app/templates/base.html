@@ -1,0 +1,24 @@
+<html>
+    <head>
+      <title>Welcome to Animal Snapshot</title>
+      <link href="{{ url_for('static', filename='styles/styles.css') }}" rel="stylesheet">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div>Animal Snapshot: <a href="{{ url_for('index') }}">Home</a>
+          <a href="{{ url_for('upload') }}">Upload</a>
+          <a href="{{ url_for('logout') }}">Sign Out</a>
+        </div>
+        <hr>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
