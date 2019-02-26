@@ -3,4 +3,24 @@
 {% block content %}
   <h1>Upload Complete</h1>
   <p>Your files have been successfully uploaded.</p>
+  <p>Would you like to upload additional images or begin classification?</p><br>
+  <div class="actions">
+    <input type="button" class="btn" value="Upload Images" onclick="window.location.href='{{ url_for('upload') }}';">
+    <input type="button" class="btn" value="Launch Image Classifier" id="classify_btn">
+  </div>
+
+  <div style="width: 100%; align-items: center;">
+    <div class='container'>
+      <p>Image classification in progress...</p>
+      <div class='loader'></div>
+      <p id='message'>Thanks for waiting...</p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $("#classify_btn").click(function() {
+      $(".container").show();
+      console.log('Clicked');
+    });
+  </script>
 {% endblock %}

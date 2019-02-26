@@ -48,7 +48,8 @@ def upload():
 
         return redirect(url_for('complete'))
     else:
-        return render_template('upload.html', title='File Upload')
+        username = current_user.username
+        return render_template('upload.html', title='File Upload', username = username)
 
 @app.route('/complete')
 @login_required
