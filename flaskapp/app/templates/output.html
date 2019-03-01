@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Upload Complete</h1>
-  <p>Your files have been successfully uploaded.</p>
-  <p>Would you like to upload additional images or begin classification?</p><br>
-  <div class="actions">
+  <h1>Classification Complete</h1>
+  <p>{{ identified }} images were classified successfully.</p>
+  <p>{{ wtf }} images were not able to be automatically classified.</p>
+  <p>Click here to download tabular results (<a href="{{ url_for('csv_download') }}" target="blank">CSV</a>)</p>
+
+  <!-- <div class="actions">
     <input type="button" class="btn" value="Upload Images" onclick="window.location.href='{{ url_for('upload') }}';">
     <input type="submit" class="btn" value="Launch Image Classifier" id="classify_btn">
   </div>
@@ -22,5 +24,5 @@
       $(".container").show();
       console.log('Clicked');
     });
-  </script>
+  </script> -->
 {% endblock %}

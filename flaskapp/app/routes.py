@@ -1,10 +1,14 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, send_file
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from werkzeug.urls import url_parse
 from app import app
 from app.forms import LoginForm
 import boto3
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
+import csv
 
 s3 = boto3.client('s3')
 bucket_name = 'w210-img-upload'
@@ -56,3 +60,39 @@ def upload():
 def complete():
     bucket_url = 'https://s3.console.aws.amazon.com/s3/buckets/'+bucket_name
     return render_template('complete.html', title='Thank You!', bucket_url = bucket_url)
+
+@app.route('/output')
+@login_required
+def output():
+    db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
+    engine = create_engine(db_string, echo=True)
+    Base = declarative_base(engine)
+    output_file = './app/downloads/'+current_user.username+'_results.csv'
+
+    class Results(Base):
+        __tablename__ = 'dummy_table'
+        # __tablename__ = str(current_user.username + '_results')
+        __table_args__ = {'autoload':True}
+
+    metadata = Base.metadata
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    qry = session.query(Results)
+
+    with open(output_file, 'w') as csvfile:
+        outcsv = csv.writer(csvfile, delimiter=',',quotechar='"', quoting = csv.QUOTE_MINIMAL)
+        header = Results.__table__.columns.keys()
+
+        outcsv.writerow(header)
+
+        for record in qry.all():
+            outcsv.writerow([getattr(record, c) for c in header ])
+
+    return render_template('output.html', title='Results Download')
+
+@app.route('/csv_download')
+@login_required
+def csv_download():
+    download_file = current_user.username+'_results.csv'
+    return send_file('./downloads/'+download_file, attachment_filename=download_file)
