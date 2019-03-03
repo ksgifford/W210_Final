@@ -75,30 +75,30 @@ def complete():
 @app.route('/output')
 @login_required
 def output():
-    # db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
-    # engine = create_engine(db_string, echo=True)
-    # Base = declarative_base(engine)
-    # output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
-    #
-    # class Results(Base):
-    #     __tablename__ = 'dummy_table'
-    #     # __tablename__ = str(current_user.username + '_results')
-    #     __table_args__ = {'autoload':True}
-    #
-    # metadata = Base.metadata
-    # Session = sessionmaker(bind=engine)
-    # session = Session()
-    #
-    # qry = session.query(Results)
-    #
-    # with open(output_file, 'w') as csvfile:
-    #     outcsv = csv.writer(csvfile, delimiter=',',quotechar='"', quoting = csv.QUOTE_MINIMAL)
-    #     header = Results.__table__.columns.keys()
-    #
-    #     outcsv.writerow(header)
-    #
-    #     for record in qry.all():
-    #         outcsv.writerow([getattr(record, c) for c in header ])
+    db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
+    engine = create_engine(db_string, echo=True)
+    Base = declarative_base(engine)
+    output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
+
+    class Results(Base):
+        __tablename__ = 'dummy_table'
+        # __tablename__ = str(current_user.username + '_results')
+        __table_args__ = {'autoload':True}
+
+    metadata = Base.metadata
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    qry = session.query(Results)
+
+    with open(output_file, 'w') as csvfile:
+        outcsv = csv.writer(csvfile, delimiter=',',quotechar='"', quoting = csv.QUOTE_MINIMAL)
+        header = Results.__table__.columns.keys()
+
+        outcsv.writerow(header)
+
+        for record in qry.all():
+            outcsv.writerow([getattr(record, c) for c in header ])
 
     file_prefix = current_user.username+'/wtf'
     file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
