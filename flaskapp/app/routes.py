@@ -81,8 +81,8 @@ def output():
     output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
 
     class Results(Base):
-        __tablename__ = 'dv_test_table'
-        # __tablename__ = 'dummy_table'
+        # __tablename__ = 'dv_test_table'
+        __tablename__ = 'dummy_table'
         # __tablename__ = str(current_user.username + '_results')
         __table_args__ = {'autoload':True}
 
