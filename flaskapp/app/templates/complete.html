@@ -4,10 +4,10 @@
   <h1>Upload Complete</h1>
   <p>Your files have been successfully uploaded.</p>
   <p>Would you like to upload additional images or begin classification?</p><br>
-  <div class="actions">
-    <input type="button" class="btn" value="Upload Images" onclick="window.location.href='{{ url_for('upload') }}';">
-    <input type="submit" class="btn" value="Launch Image Classifier" id="classify_btn">
-  </div>
+  <form method="post">
+    <input type="submit" class="btn" value="Upload Images" name="upload_again">
+    <input type="submit" class="btn" value="Launch Image Classifier" name="launcher" id="classify_btn">
+  </form>
 
   <div style="width: 100%; align-items: center;">
     <div class='container'>

@@ -9,9 +9,13 @@ import boto3
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 import csv
+import shutil
 
-s3 = boto3.client('s3')
+s3_client = boto3.client('s3')
 bucket_name = 'w210-img-upload'
+
+s3_resource = boto3.resource('s3')
+my_bucket = s3_resource.Bucket(bucket_name)
 
 @app.route('/')
 @app.route('/index')
@@ -47,7 +51,7 @@ def upload():
         data_files = request.files.getlist('file[]')
         for data_file in data_files:
             # print(data_file)
-            s3.upload_fileobj(data_file, bucket_name, current_user.username+'/upload/'+data_file.filename)
+            s3_client.upload_fileobj(data_file, bucket_name, current_user.username+'/upload/'+data_file.filename)
             print("Uploading "+data_file.filename+" to "+bucket_name+".")
 
         return redirect(url_for('complete'))
@@ -55,11 +59,18 @@ def upload():
         username = current_user.username
         return render_template('upload.html', title='File Upload', username = username)
 
-@app.route('/complete')
+@app.route('/complete', methods=['GET', 'POST'])
 @login_required
 def complete():
-    bucket_url = 'https://s3.console.aws.amazon.com/s3/buckets/'+bucket_name
-    return render_template('complete.html', title='Thank You!', bucket_url = bucket_url)
+    # bucket_url = 'https://s3.console.aws.amazon.com/s3/buckets/'+bucket_name
+
+    if request.method == "POST":
+        if 'upload_again' in request.form:
+            return redirect(url_for('upload'))
+        elif 'launcher' in request.form:
+            return redirect(url_for('output'))
+    else:
+        return render_template('complete.html', title='Thank You!')
 
 @app.route('/output')
 @login_required
@@ -67,7 +78,7 @@ def output():
     db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
     engine = create_engine(db_string, echo=True)
     Base = declarative_base(engine)
-    output_file = './app/downloads/'+current_user.username+'_results.csv'
+    output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
 
     class Results(Base):
         __tablename__ = 'dummy_table'
@@ -89,10 +100,24 @@ def output():
         for record in qry.all():
             outcsv.writerow([getattr(record, c) for c in header ])
 
+    file_prefix = current_user.username+'/wtf'
+    file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
+    for obj in file_list:
+        local_file_name = './app/downloads/'+current_user.username+'/img/'+obj.key.split('/')[2]
+        my_bucket.download_file(obj.key,local_file_name)
+
+    shutil.make_archive('./app/downloads/'+current_user.username+'/'+current_user.username+'_WTFimages','zip','./app/downloads/'+current_user.username+'/img')
+
     return render_template('output.html', title='Results Download')
 
 @app.route('/csv_download')
 @login_required
 def csv_download():
     download_file = current_user.username+'_results.csv'
-    return send_file('./downloads/'+download_file, attachment_filename=download_file)
+    return send_file('./downloads/'+current_user.username+'/'+download_file, attachment_filename=download_file)
+
+@app.route('/zip_download')
+@login_required
+def zip_download():
+    download_zip = current_user.username+'_WTFimages.zip'
+    return send_file('./downloads/'+current_user.username+'/'+download_zip, attachment_filename=download_zip)
