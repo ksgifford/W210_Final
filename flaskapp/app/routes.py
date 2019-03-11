@@ -12,6 +12,7 @@ import csv
 import shutil
 import requests
 import json
+import os
 
 s3_client = boto3.client('s3')
 bucket_name = 'w210-img-upload'
@@ -83,8 +84,8 @@ def output():
     output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
 
     class Results(Base):
-        # __tablename__ = 'test_upload'
-        __tablename__ = 'dummy_table'
+        __tablename__ = 'test_upload'
+        # __tablename__ = 'dummy_table'
         # __tablename__ = str(current_user.username + '_results')
         __table_args__ = {'autoload':True}
 
@@ -105,11 +106,19 @@ def output():
 
     file_prefix = current_user.username+'/wtf'
     file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
+    img_dir = './app/downloads/'+current_user.username+'/img'
     for obj in file_list:
         local_file_name = './app/downloads/'+current_user.username+'/img/'+obj.key.split('/')[2]
         my_bucket.download_file(obj.key,local_file_name)
 
-    shutil.make_archive('./app/downloads/'+current_user.username+'/'+current_user.username+'_WTFimages','zip','./app/downloads/'+current_user.username+'/img')
+    shutil.make_archive('./app/downloads/'+current_user.username+'/'+current_user.username+'_WTFimages','zip',img_dir)
+    for file in os.listdir(img_dir):
+        file_path = os.path.join(img_dir,file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(e)
 
     return render_template('output.html', title='Results Download')
 
