@@ -10,6 +10,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 import csv
 import shutil
+import requests
+import json
 
 s3_client = boto3.client('s3')
 bucket_name = 'w210-img-upload'
@@ -68,7 +70,7 @@ def complete():
         if 'upload_again' in request.form:
             return redirect(url_for('upload'))
         elif 'launcher' in request.form:
-            return redirect(url_for('output'))
+            return redirect(url_for('classify'))
     else:
         return render_template('complete.html', title='Thank You!')
 
@@ -81,7 +83,7 @@ def output():
     output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
 
     class Results(Base):
-        # __tablename__ = 'dv_test_table'
+        # __tablename__ = 'test_upload'
         __tablename__ = 'dummy_table'
         # __tablename__ = str(current_user.username + '_results')
         __table_args__ = {'autoload':True}
@@ -110,6 +112,16 @@ def output():
     shutil.make_archive('./app/downloads/'+current_user.username+'/'+current_user.username+'_WTFimages','zip','./app/downloads/'+current_user.username+'/img')
 
     return render_template('output.html', title='Results Download')
+
+@app.route('/classify')
+@login_required
+def classify():
+    path = '/home/ubuntu/w210-img-upload/'+current_user.username+'/upload'
+    username = current_user.username
+    payload = json.dumps({'path':path, 'userId':username})
+    req = requests.post("http://ec2-3-87-218-106.compute-1.amazonaws.com:5000/predictFolder", json=payload)
+    print(req.text)
+    return redirect(url_for('output'))
 
 @app.route('/csv_download')
 @login_required
