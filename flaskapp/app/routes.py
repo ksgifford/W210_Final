@@ -129,7 +129,11 @@ def classify():
     username = current_user.username
     payload = json.dumps({'path':path, 'userId':username})
     req = requests.post("http://ec2-3-87-218-106.compute-1.amazonaws.com:5000/predictFolder", json=payload)
-    print(req.text)
+
+    test_file = './app/downloads/'+current_user.username+'/'+current_user.username+'TEST.txt'
+    with open(test_file, 'w') as json_file:
+        json.dump(req.text, json_file)
+    
     return redirect(url_for('output'))
 
 @app.route('/csv_download')
