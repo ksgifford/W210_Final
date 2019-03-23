@@ -144,8 +144,8 @@ def csv_download():
     engine.dispose()
 
     download_file = current_user.username+'_results.csv'
-    # return send_file('./downloads/'+current_user.username+'/'+download_file, attachment_filename=download_file)
-    return send_file(output_file, attachment_filename=download_file)
+    return send_file('./downloads/'+current_user.username+'/'+download_file, attachment_filename=download_file)
+    # return send_file(output_file, attachment_filename=download_file)
 
 @app.route('/zip_download')
 @login_required
