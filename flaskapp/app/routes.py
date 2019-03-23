@@ -140,6 +140,7 @@ def csv_download():
         for record in qry.all():
             outcsv.writerow([getattr(record, c) for c in header ])
 
+    session.close()
     engine.dispose()
 
     download_file = current_user.username+'_results.csv'
