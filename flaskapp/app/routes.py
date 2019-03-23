@@ -20,10 +20,6 @@ bucket_name = 'w210-img-upload'
 s3_resource = boto3.resource('s3')
 my_bucket = s3_resource.Bucket(bucket_name)
 
-db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
-engine = create_engine(db_string, echo=True)
-Base = declarative_base(engine)
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -117,6 +113,10 @@ def classify():
 @app.route('/csv_download')
 @login_required
 def csv_download():
+    db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
+    engine = create_engine(db_string, echo=True)
+    Base = declarative_base(engine)
+
     output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
 
     class Results(Base):
@@ -139,6 +139,8 @@ def csv_download():
 
         for record in qry.all():
             outcsv.writerow([getattr(record, c) for c in header ])
+
+    engine.dispose()
 
     download_file = current_user.username+'_results.csv'
     # return send_file('./downloads/'+current_user.username+'/'+download_file, attachment_filename=download_file)
