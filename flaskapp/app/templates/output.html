@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Classification Complete</h1>
+  <h2>Classification Complete</h2>
   <!-- <p>??? images were classified successfully.</p> -->
   <!-- <p>??? images were not able to be automatically classified.</p> -->
-  <p>Click here to download tabular results (<a href="{{ url_for('csv_download') }}" target="blank">CSV</a>)</p>
-  <p>Click here to download unclassified images (<a href="{{ url_for('zip_download') }}" target="blank">ZIP</a>)</p>
+  <p>Click here to download tabular results</p>
+  <a href="{{ url_for('csv_download') }}" target="blank" class="btn-primary btn">CSV</a>
+  <p>Click here to download unclassified images</p>
+  <a href="{{ url_for('zip_download') }}" target="blank" class="btn-primary btn">ZIP</a>
 
   <!-- <div class="actions">
     <input type="button" class="btn" value="Upload Images" onclick="window.location.href='{{ url_for('upload') }}';">

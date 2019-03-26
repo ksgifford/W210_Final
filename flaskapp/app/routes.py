@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, send_file
+from flask import render_template, flash, redirect, url_for, request, send_file, send_from_directory
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -78,46 +78,12 @@ def complete():
 @app.route('/output')
 @login_required
 def output():
-    file_prefix = current_user.username+'/wtf'
-    file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
-    img_dir = './app/downloads/'+current_user.username+'/img'
-    for obj in file_list:
-        local_file_name = './app/downloads/'+current_user.username+'/img/'+obj.key.split('/')[2]
-        my_bucket.download_file(obj.key,local_file_name)
-
-    shutil.make_archive('./app/downloads/'+current_user.username+'/'+current_user.username+'_WTFimages','zip',img_dir)
-    for file in os.listdir(img_dir):
-        file_path = os.path.join(img_dir,file)
-        try:
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        except Exception as e:
-            print(e)
-
-    return render_template('output.html', title='Results Download')
-
-@app.route('/classify')
-@login_required
-def classify():
-    path = '/home/ubuntu/w210-img-upload/'+current_user.username+'/upload'
-    username = current_user.username
-    payload = json.dumps({'path':path, 'userId':username})
-    req = requests.post("http://ec2-3-87-218-106.compute-1.amazonaws.com:5000/predictFolder", json=payload)
-
-    test_file = './app/downloads/'+current_user.username+'/'+current_user.username+'TEST.txt'
-    with open(test_file, 'w') as json_file:
-        json.dump(req.text, json_file)
-
-    return redirect(url_for('output'))
-
-@app.route('/csv_download')
-@login_required
-def csv_download():
     db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
     engine = create_engine(db_string, echo=True)
     Base = declarative_base(engine)
 
-    output_file = './app/downloads/'+current_user.username+'/'+current_user.username+'_results.csv'
+    output_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_results.csv'
+    os.remove(output_file)
 
     class Results(Base):
         __tablename__ = 'test_upload'
@@ -143,12 +109,48 @@ def csv_download():
     session.close()
     engine.dispose()
 
+    file_prefix = current_user.username+'/wtf'
+    file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
+    img_dir = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img'
+    for obj in file_list:
+        local_file_name = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img/'+obj.key.split('/')[2]
+        my_bucket.download_file(obj.key,local_file_name)
+
+    shutil.make_archive(app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_WTFimages','zip',img_dir)
+    for file in os.listdir(img_dir):
+        file_path = os.path.join(img_dir,file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(e)
+
+    return render_template('output.html', title='Results Download')
+
+@app.route('/classify')
+@login_required
+def classify():
+    path = '/home/ubuntu/w210-img-upload/'+current_user.username+'/upload'
+    username = current_user.username
+    payload = json.dumps({'path':path, 'userId':username})
+    req = requests.post("http://ec2-3-87-218-106.compute-1.amazonaws.com:5000/predictFolder", json=payload)
+
+    test_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'TEST.txt'
+    with open(test_file, 'w') as json_file:
+        json.dump(req.text, json_file)
+
+    return redirect(url_for('output'))
+
+@app.route('/csv_download')
+@login_required
+def csv_download():
     download_file = current_user.username+'_results.csv'
-    return send_file('./downloads/'+current_user.username+'/'+download_file, attachment_filename=download_file)
-    # return send_file(output_file, attachment_filename=download_file)
+    return send_from_directory(app.config['DOWNLOAD_FOLDER']+current_user.username, filename=download_file, as_attachment=True)
+    # return send_file(output_file, attachment_filename=output_file)
 
 @app.route('/zip_download')
 @login_required
 def zip_download():
     download_zip = current_user.username+'_WTFimages.zip'
-    return send_file('./downloads/'+current_user.username+'/'+download_zip, attachment_filename=download_zip)
+    # return send_file('downloads/'+current_user.username+'/'+download_zip, attachment_filename=download_zip)
+    return send_from_directory(app.config['DOWNLOAD_FOLDER']+current_user.username, filename=download_zip, as_attachment=True)

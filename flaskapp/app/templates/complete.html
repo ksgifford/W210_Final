@@ -1,25 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Upload Complete</h1>
-  <p>Your files have been successfully uploaded.</p>
+  <h2>Upload Complete</h2>
+  <!-- <p>Your files have been successfully uploaded.</p> -->
   <p>Would you like to upload additional images or begin classification?</p><br>
   <form method="post">
     <input type="submit" class="btn" value="Upload Images" name="upload_again">
-    <input type="submit" class="btn" value="Launch Image Classifier" name="launcher" id="classify_btn">
+    <input type="submit" class="btn" value="Classify" name="launcher" id="classify_btn">
   </form>
 
-  <div style="width: 100%; align-items: center;">
-    <div class='container'>
-      <p>Image classification in progress...</p>
-      <div class='loader'></div>
-      <p id='message'>Thanks for waiting...</p>
-    </div>
+  <div class='waitContainer'>
+    <div class='loader'></div>
   </div>
 
   <script type="text/javascript">
     $("#classify_btn").click(function() {
-      $(".container").show();
+      $(".waitContainer").show();
       console.log('Clicked');
     });
   </script>
