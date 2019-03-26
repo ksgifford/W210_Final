@@ -13,7 +13,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 # app.config['DOWNLOAD_FOLDER'] = '/Users/ksgifford/ischool/W210/W210_Final/flaskapp/app/downloads/'
-app.config['DOWNLOAD_FOLDER'] = '/home/ubuntu/W210_Final/flaskapp/app/downloads'
+app.config['DOWNLOAD_FOLDER'] = '/home/ubuntu/W210_Final/flaskapp/app/downloads/'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 from app import routes, models
