@@ -45,6 +45,13 @@ CONTENTS:
 01. General
 ============================================================ */
 
+.narrative {
+	max-width: 75%;
+	text-align: justify;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 .waitContainer {
   width: 240px;
   height: 260px;
@@ -154,7 +161,7 @@ a.scrollup i:hover {
 
 /*---------- forms ----------*/
 
-input[type=text], input[type=submit], textarea {
+input[type=text], input[type=password], input[type=submit], textarea {
 	width: 100%;
 	padding: 0.5em;
 	font-size: 1em;
@@ -430,7 +437,7 @@ header .logo {
 
 /* --- Header subscribe form --- */
 
-#header-wrapper input[type=text] {
+#header-wrapper input[type=text], #password{
 	background: rgba(227, 231, 228, 1);
 	font-family: 'Open Sans', sans serif;
 	font-size: 1.3125em;
@@ -439,14 +446,14 @@ header .logo {
 	vertical-align: middle;
 	margin-bottom:0 !important;
 }
-#header-wrapper input[type=text]:focus {
+#header-wrapper input[type=text]:focus, #password:focus{
 	background: #43413e;
 	color: #eff1ef;
 	transition: background 0.25 ease-in;
 	-moz-transition: background 0.25 ease-in;
 	-webkit-transition: background 0.25 ease-in;
 }
-#header-wrapper input[type=text] {
+#header-wrapper input[type=text], #password{
 	height: 2.9em;
 	width:50%;
 }
@@ -953,7 +960,7 @@ section#about {
 	z-index: 999;
 }
 
-#contact-form input[type=text], .contactForm textarea {
+#contact-form input[type=text], input[type=password], .contactForm textarea {
 	background: rgba(227, 231, 228, 1);
 	font-family: 'Open Sans', sans serif;
 	border: 0;
@@ -966,7 +973,7 @@ section#about {
 	height: 156px;
 }
 
-#contact-form input[type=text]:focus, .contactForm textarea:focus {
+#contact-form input[type=text]:focus, input[type=password]:focus, .contactForm textarea:focus {
 	background: #fff;
 	color: #555;
 	box-shadow: none;
@@ -976,7 +983,7 @@ section#about {
 	-moz-transition: background 0.25 ease-in;
 	-webkit-transition: background 0.25 ease-in;
 }
-#contact-form input[type=text] {
+#contact-form input[type=text], input[type=password] {
 	height: 60px;
 	margin-bottom:30px;
 }

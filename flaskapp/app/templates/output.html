@@ -4,10 +4,25 @@
   <h2>Classification Complete</h2>
   <!-- <p>??? images were classified successfully.</p> -->
   <!-- <p>??? images were not able to be automatically classified.</p> -->
-  <p>Click here to download tabular results</p>
+  <p>Click here to download tabular results:</p>
   <a href="{{ url_for('csv_download') }}" target="blank" class="btn-primary btn">CSV</a>
-  <p>Click here to download unclassified images</p>
+  <p>Click here to download unclassified images:</p>
   <a href="{{ url_for('zip_download') }}" target="blank" class="btn-primary btn">ZIP</a>
+
+  <h2>Thank you for using Creature Counter!</h2>
+  <p class="narrative">We encourage users to add their data to our growing database of wildlife sitings,
+    but we understand that confidentiality requirements sometimes prevent this.
+    If you would like to contribute your classification results, please click
+    "Contribute" below. If not, please click "Done."</p>
+  <p class="narrative">To ensure confidentiality, clicking "Done" will purge your classification
+    results and images. Don't forget to download your results first!</p>
+  <a href="{{ url_for('save_data') }}" class="btn-primary btn">Contribute</a>
+  <a href="{{ url_for('purge_data') }}" class="btn-primary btn">Done</a>
+
+  <!-- <form method="post">
+    <input type="submit" class="btn" value="Contribute" name="save_data">
+    <input type="submit" class="btn" value="Done" name="purge_data">
+  </form> -->
 
   <!-- <div class="actions">
     <input type="button" class="btn" value="Upload Images" onclick="window.location.href='{{ url_for('upload') }}';">

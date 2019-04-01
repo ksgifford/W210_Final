@@ -20,6 +20,8 @@ bucket_name = 'w210-img-upload'
 s3_resource = boto3.resource('s3')
 my_bucket = s3_resource.Bucket(bucket_name)
 
+db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -53,8 +55,9 @@ def upload():
     if request.method == 'POST':
         data_files = request.files.getlist('file[]')
         for data_file in data_files:
-            # print(data_file)
-            s3_client.upload_fileobj(data_file, bucket_name, current_user.username+'/upload/'+data_file.filename)
+            filename_old = current_user.username+'/upload/'+data_file.filename
+            filename_new = filename_old.lower()
+            s3_client.upload_fileobj(data_file, bucket_name, filename_new)
             print("Uploading "+data_file.filename+" to "+bucket_name+".")
 
         return redirect(url_for('complete'))
@@ -65,8 +68,6 @@ def upload():
 @app.route('/complete', methods=['GET', 'POST'])
 @login_required
 def complete():
-    # bucket_url = 'https://s3.console.aws.amazon.com/s3/buckets/'+bucket_name
-
     if request.method == "POST":
         if 'upload_again' in request.form:
             return redirect(url_for('upload'))
@@ -75,15 +76,14 @@ def complete():
     else:
         return render_template('complete.html', title='Thank You!')
 
-@app.route('/output')
+@app.route('/output', methods=['GET', 'POST'])
 @login_required
 def output():
-    db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
     engine = create_engine(db_string, echo=True)
     Base = declarative_base(engine)
 
     output_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_results.csv'
-    os.remove(output_file)
+    # os.remove(output_file)
 
     class Results(Base):
         __tablename__ = 'test_upload'
@@ -154,3 +154,29 @@ def zip_download():
     download_zip = current_user.username+'_WTFimages.zip'
     # return send_file('downloads/'+current_user.username+'/'+download_zip, attachment_filename=download_zip)
     return send_from_directory(app.config['DOWNLOAD_FOLDER']+current_user.username, filename=download_zip, as_attachment=True)
+
+@app.route('/save_data')
+@login_required
+def save_data():
+    return redirect(url_for('index'))
+
+@app.route('/purge_data')
+@login_required
+def purge_data():
+    prefix = current_user.username+'/'
+    my_bucket.objects.filter(Prefix=prefix).delete()
+    engine = create_engine(db_string, echo=True)
+    connection = engine.connect()
+    connection.execute("DROP TABLE IF EXISTS {}".format('test_upload'))
+    connection.close()
+    engine.dispose()
+    purge_dir = os.path.join(app.config['DOWNLOAD_FOLDER'],current_user.username)
+    for file in os.listdir(purge_dir):
+        file_path = os.path.join(purge_dir,file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(e)
+
+    return redirect(url_for('index'))
