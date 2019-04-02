@@ -52,6 +52,10 @@ CONTENTS:
 	margin-right: auto;
 }
 
+.formLabel {
+	color: #09828c;
+}
+
 .waitContainer {
   width: 240px;
   height: 260px;

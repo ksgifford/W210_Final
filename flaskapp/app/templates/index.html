@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Welcome to Creature Counter</h2>
+  <h2>Welcome to CREATURE COUNTER</h2>
   <p class="narrative">
     CREATURE COUNTER is an image classification system designed to help ecological
     researchers and citizen scientists process wildlife camera trap images. Creature
@@ -12,20 +12,20 @@
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.username.label }}<br>
+            {{ form.username.label(class_="formLabel") }}<br>
             {{ form.username(size=32) }}<br>
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.password.label }}<br>
+            {{ form.password.label(class_="formLabel") }}<br>
             {{ form.password(size=32) }}<br>
             {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label(class_="formLabel") }}</p>
         <p>{{ form.submit() }}</p>
     </form>
 {% endblock %}
