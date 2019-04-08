@@ -97,7 +97,7 @@ def upload():
         for file in os.listdir(upload_dir):
             gpsDict.update(exifExtractor(os.path.join(upload_dir,file)))
 
-        dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='colums')
+        dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='columns')
         dfGPS.append(dfGPStmp)
         return redirect(url_for('complete'))
     else:
