@@ -13,6 +13,8 @@ import shutil
 import requests
 import json
 import os
+import pandas as pd
+import exifread
 
 s3_client = boto3.client('s3')
 bucket_name = 'w210-img-upload'
@@ -21,6 +23,36 @@ s3_resource = boto3.resource('s3')
 my_bucket = s3_resource.Bucket(bucket_name)
 
 db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
+
+dfGPS = pd.DataFrame()
+
+def df_to_geojson(df, properties, lat='Lat', lon='Long'):
+    geojson = {'type':'FeatureCollection', 'features':[]}
+    for _, row in df.iterrows():
+        feature = {'type':'Feature',
+                   'properties':{},
+                   'geometry':{'type':'Point',
+                               'coordinates':[]}}
+        feature['geometry']['coordinates'] = [row[lon],row[lat]]
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
+        geojson['features'].append(feature)
+    return geojson
+
+def gpsParser(x):
+    degrees = int(x[1:-1].split(',')[0])
+    minNumerator = int(x[1:-1].split(',')[1].split('/')[0])
+    minDenominator = int(x[1:-1].split(',')[1].split('/')[1])
+    deciMinutes = minNumerator/minDenominator/60
+    return(np.round(degrees+deciMinutes,6))
+
+def exifExtractor(file):
+    image = open(file, 'rb')
+    tags = exifread.process_file(image)
+    gpsInfo = {'fileName': image.name.lower()}
+    for k in ['GPS GPSLatitudeRef', 'GPS GPSLatitude', 'GPS GPSLongitudeRef', 'GPS GPSLongitude']:
+        gpsInfo[k] = str(tags[k])
+    return gpsInfo
 
 @app.route('/')
 @app.route('/index')
@@ -54,12 +86,15 @@ def logout():
 def upload():
     if request.method == 'POST':
         data_files = request.files.getlist('file[]')
+        # gpsDict = {}
         for data_file in data_files:
             filename_old = current_user.username+'/upload/'+data_file.filename
             filename_new = filename_old.lower()
             s3_client.upload_fileobj(data_file, bucket_name, filename_new)
             print("Uploading "+data_file.filename+" to "+bucket_name+".")
 
+        # dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='colums')
+        # dfGPS.append(dfGPStmp)
         return redirect(url_for('complete'))
     else:
         username = current_user.username
@@ -105,6 +140,14 @@ def output():
 
         for record in qry.all():
             outcsv.writerow([getattr(record, c) for c in header ])
+
+    df_results = pd.read_csv(output_file)
+    df_resTransform = df_results.loc[df_results.groupby(['fileName'])['probability'].idxmax()]
+    df_output = pd.merge(df_resTransform, dfGPS, on='fileName')
+    geojson = df_to_geojson(df_output, df_output.columns)
+    json_filename = app.config['DOWNLOAD_FOLDER']+current_user.username+'/species.json'
+    with open(json_filename, 'w') as f:
+        json.dump(geojson, f)
 
     session.close()
     engine.dispose()
