@@ -14,6 +14,7 @@ import requests
 import json
 import os
 import pandas as pd
+import numpy as np
 import exifread
 
 s3_client = boto3.client('s3')
