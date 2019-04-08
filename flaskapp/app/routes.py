@@ -24,8 +24,6 @@ my_bucket = s3_resource.Bucket(bucket_name)
 
 db_string = "postgres://dbmaster:dbpa$$w0rd!@w210postgres01.c8siy60gz3hg.us-east-1.rds.amazonaws.com:5432/w210results"
 
-dfGPS = pd.DataFrame()
-
 def df_to_geojson(df, properties, lat='Lat', lon='Long'):
     geojson = {'type':'FeatureCollection', 'features':[]}
     for _, row in df.iterrows():
@@ -98,7 +96,14 @@ def upload():
             gpsDict.update(exifExtractor(os.path.join(upload_dir,file)))
 
         dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='columns')
-        dfGPS= dfGPS.append(dfGPStmp)
+        geotags_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv'
+        if os.path.isfile(geotags_file):
+            dfGPSold = pd.read_csv(geotags_file)
+            dfGPS = pd.concat(dfGPSold, dfGPStmp)
+            dfGPS.to_csv(geotags_file)
+        else:
+            dfGPStmp.to_csv(geotags_file)
+
         return redirect(url_for('complete'))
     else:
         username = current_user.username
@@ -147,6 +152,7 @@ def output():
 
     df_results = pd.read_csv(output_file)
     df_resTransform = df_results.loc[df_results.groupby(['fileName'])['probability'].idxmax()]
+    dfGPS = pd.read_csv(app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv')
     df_output = pd.merge(df_resTransform, dfGPS, on='fileName')
     geojson = df_to_geojson(df_output, df_output.columns)
     json_filename = app.config['DOWNLOAD_FOLDER']+current_user.username+'/species.json'
