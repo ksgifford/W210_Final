@@ -86,15 +86,19 @@ def logout():
 def upload():
     if request.method == 'POST':
         data_files = request.files.getlist('file[]')
-        # gpsDict = {}
         for data_file in data_files:
             filename_old = current_user.username+'/upload/'+data_file.filename
             filename_new = filename_old.lower()
             s3_client.upload_fileobj(data_file, bucket_name, filename_new)
             print("Uploading "+data_file.filename+" to "+bucket_name+".")
 
-        # dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='colums')
-        # dfGPS.append(dfGPStmp)
+        upload_dir = '/home/ubuntu/s3bucket/'+current_user.username+'/upload/'
+        gpsDict = {}
+        for file in os.listdir(upload_dir):
+            gpsDict.update(exifExtractor(os.path.join(upload_dir,file)))
+
+        dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='colums')
+        dfGPS.append(dfGPStmp)
         return redirect(url_for('complete'))
     else:
         username = current_user.username
