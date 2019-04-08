@@ -47,7 +47,7 @@ def gpsParser(x):
 def exifExtractor(file):
     image = open(file, 'rb')
     tags = exifread.process_file(image)
-    gpsInfo = {'fileName': image.name.lower()}
+    gpsInfo = {'fileName': image.name.lower().split('/')[-1]}
     for k in ['GPS GPSLatitudeRef', 'GPS GPSLatitude', 'GPS GPSLongitudeRef', 'GPS GPSLongitude']:
         gpsInfo[k] = str(tags[k])
     return gpsInfo
@@ -95,12 +95,20 @@ def upload():
         for file in os.listdir(upload_dir):
             gpsDict.update(exifExtractor(os.path.join(upload_dir,file)))
 
-        dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='columns')
+        dfGPSRaw = pd.DataFrame.from_dict([gpsDict], orient='columns')
+        dfGPSRaw['LatRef'] = dfGPSRaw['GPS GPSLatitudeRef'].apply(lambda x: 1 if x == 'N' else -1)
+        dfGPSRaw['LonRef'] = dfGPSRaw['GPS GPSLongitudeRef'].apply(lambda x: 1 if x == 'E' else -1)
+        dfGPSRaw['Lat'] = dfGPSRaw['GPS GPSLatitude'].apply(gpsParser)*dfGPSRaw['LatRef']
+        dfGPSRaw['Long'] = dfGPSRaw['GPS GPSLongitude'].apply(gpsParser)*dfGPSRaw['LonRef']
+
+        dfGPStmp = dfGPSRaw[['fileName','Lat', 'Long']]
+        dfGPStmp.columns = ['fileName','Lat', 'Long']
+
         geotags_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv'
         if os.path.isfile(geotags_file):
             dfGPSold = pd.read_csv(geotags_file)
-            dfGPS = pd.concat(dfGPSold, dfGPStmp)
-            dfGPS.to_csv(geotags_file)
+            dfGPSnew = pd.concat(dfGPSold, dfGPStmp)
+            dfGPSnew.to_csv(geotags_file)
         else:
             dfGPStmp.to_csv(geotags_file)
 
