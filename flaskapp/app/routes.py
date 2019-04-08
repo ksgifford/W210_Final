@@ -98,7 +98,7 @@ def upload():
             gpsDict.update(exifExtractor(os.path.join(upload_dir,file)))
 
         dfGPStmp = pd.DataFrame.from_dict([gpsDict], orient='columns')
-        dfGPS.append(dfGPStmp)
+        dfGPS= dfGPS.append(dfGPStmp)
         return redirect(url_for('complete'))
     else:
         username = current_user.username
