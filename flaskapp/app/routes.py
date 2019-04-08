@@ -108,7 +108,7 @@ def upload():
         geotags_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv'
         if os.path.isfile(geotags_file):
             dfGPSold = pd.read_csv(geotags_file)
-            dfGPSnew = pd.concat(dfGPSold, dfGPStmp)
+            dfGPSnew = pd.concat([dfGPSold, dfGPStmp])
             dfGPSnew.to_csv(geotags_file)
         else:
             dfGPStmp.to_csv(geotags_file)
