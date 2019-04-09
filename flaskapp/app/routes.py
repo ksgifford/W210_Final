@@ -96,8 +96,8 @@ def upload():
         for file in os.listdir(upload_dir):
             df_tmp = pd.DataFrame.from_dict([exifExtractor(os.path.join(upload_dir,file))],orient='columns')
             dfGPSRaw = dfGPSRaw.append(df_tmp)
-            dfGPSRaw = dfGPSRaw.set_index('fileName')
 
+        dfGPSRaw = dfGPSRaw.set_index('fileName')
         dfGPSRaw['LatRef'] = dfGPSRaw['GPS GPSLatitudeRef'].apply(lambda x: 1 if x == 'N' else -1)
         dfGPSRaw['LonRef'] = dfGPSRaw['GPS GPSLongitudeRef'].apply(lambda x: 1 if x == 'E' else -1)
         dfGPSRaw['Lat'] = dfGPSRaw['GPS GPSLatitude'].apply(gpsParser)*dfGPSRaw['LatRef']
