@@ -92,11 +92,11 @@ def upload():
             print("Uploading "+data_file.filename+" to "+bucket_name+".")
 
         upload_dir = '/home/ubuntu/s3bucket/'+current_user.username+'/upload/'
-        gpsDict = {}
+        dfGPSRaw =  pd.DataFrame()
         for file in os.listdir(upload_dir):
-            gpsDict.update(exifExtractor(os.path.join(upload_dir,file)))
+            df_tmp = pd.DataFrame.from_dict([exifExtractor(os.path.join(upload_dir,file))],orient='columns')
+            dfGPSRaw = dfGPSRaw.append(df_tmp)
 
-        dfGPSRaw = pd.DataFrame.from_dict([gpsDict], orient='columns')
         dfGPSRaw['LatRef'] = dfGPSRaw['GPS GPSLatitudeRef'].apply(lambda x: 1 if x == 'N' else -1)
         dfGPSRaw['LonRef'] = dfGPSRaw['GPS GPSLongitudeRef'].apply(lambda x: 1 if x == 'E' else -1)
         dfGPSRaw['Lat'] = dfGPSRaw['GPS GPSLatitude'].apply(gpsParser)*dfGPSRaw['LatRef']
