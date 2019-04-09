@@ -97,14 +97,13 @@ def upload():
             df_tmp = pd.DataFrame.from_dict([exifExtractor(os.path.join(upload_dir,file))],orient='columns')
             dfGPSRaw = dfGPSRaw.append(df_tmp)
 
-        dfGPSRaw = dfGPSRaw.set_index('fileName')
         dfGPSRaw['LatRef'] = dfGPSRaw['GPS GPSLatitudeRef'].apply(lambda x: 1 if x == 'N' else -1)
         dfGPSRaw['LonRef'] = dfGPSRaw['GPS GPSLongitudeRef'].apply(lambda x: 1 if x == 'E' else -1)
         dfGPSRaw['Lat'] = dfGPSRaw['GPS GPSLatitude'].apply(gpsParser)*dfGPSRaw['LatRef']
         dfGPSRaw['Long'] = dfGPSRaw['GPS GPSLongitude'].apply(gpsParser)*dfGPSRaw['LonRef']
 
         dfGPStmp = dfGPSRaw[['fileName','Lat', 'Long']]
-        dfGPStmp.columns = ['fileName','Lat', 'Long']
+        dfGPStmp = dfGPStmp.set_index('fileName')
 
         geotags_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv'
         if os.path.isfile(geotags_file):
