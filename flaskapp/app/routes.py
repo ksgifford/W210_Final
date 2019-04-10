@@ -53,8 +53,8 @@ def exifExtractor(file):
         try:
             gpsInfo[k] = str(tags[k])
         except KeyError:
-            gpsInfo[k] = 0.0
-        
+            gpsInfo[k] = '[0000]'
+
     return gpsInfo
 
 @app.route('/')
