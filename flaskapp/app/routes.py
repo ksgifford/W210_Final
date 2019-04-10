@@ -39,11 +39,14 @@ def df_to_geojson(df, properties, lat='Lat', lon='Long'):
     return geojson
 
 def gpsParser(x):
-    degrees = int(x[1:-1].split(',')[0])
-    minNumerator = int(x[1:-1].split(',')[1].split('/')[0])
-    minDenominator = int(x[1:-1].split(',')[1].split('/')[1])
-    deciMinutes = minNumerator/minDenominator/60
-    return(np.round(degrees+deciMinutes,6))
+    if x == 0.0:
+        return 0.0
+    else:
+        degrees = int(x[1:-1].split(',')[0])
+        minNumerator = int(x[1:-1].split(',')[1].split('/')[0])
+        minDenominator = int(x[1:-1].split(',')[1].split('/')[1])
+        deciMinutes = minNumerator/minDenominator/60
+        return(np.round(degrees+deciMinutes,6))
 
 def exifExtractor(file):
     image = open(file, 'rb')
@@ -53,7 +56,7 @@ def exifExtractor(file):
         try:
             gpsInfo[k] = str(tags[k])
         except KeyError:
-            gpsInfo[k] = '[0000]'
+            gpsInfo[k] = 0.0
 
     return gpsInfo
 
