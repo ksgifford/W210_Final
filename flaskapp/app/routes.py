@@ -163,6 +163,7 @@ def output():
     df_resTransform = df_results.loc[df_results.groupby(['fileName'])['probability'].idxmax()]
     dfGPS = pd.read_csv(app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv')
     df_output = pd.merge(df_resTransform, dfGPS, on='fileName')
+    df_output = df_output[['fileName', 'label', 'probability', 'userId', 'Lat', 'Long']]
     geojson = df_to_geojson(df_output, df_output.columns)
     json_filename = app.config['DOWNLOAD_FOLDER']+current_user.username+'/species.json'
     with open(json_filename, 'w') as f:
@@ -187,7 +188,7 @@ def output():
         except Exception as e:
             print(e)
 
-    return render_template('output.html', title='Results Download')
+    return render_template('output.html', title='Results Download', data=geojson)
 
 @app.route('/classify')
 @login_required

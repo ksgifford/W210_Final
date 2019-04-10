@@ -8,39 +8,63 @@
   <a href="{{ url_for('csv_download') }}" target="blank" class="btn-primary btn">CSV</a>
   <p>Click here to download unclassified images:</p>
   <a href="{{ url_for('zip_download') }}" target="blank" class="btn-primary btn">ZIP</a>
+  <br>
+  <p>Images with geotag information are shown on the map below.</p>
+  <div id="map"></div>
 
   <h2>Thank you for using Creature Counter!</h2>
-  <p class="narrative">We encourage users to add their data to our growing database of wildlife sightings,
+  <!-- <p class="narrative">We encourage users to add their data to our growing database of wildlife sightings,
     but we understand that confidentiality requirements sometimes prevent this.
     If you would like to contribute your classification results, please click
-    "Contribute" below. If not, please click "Done."</p>
+    "Contribute" below. If not, please click "Done."</p> -->
   <p class="narrative">To ensure confidentiality, clicking "Done" will purge your classification
     results and images. Don't forget to download your results first!</p>
-  <a href="{{ url_for('save_data') }}" class="btn-primary btn">Contribute</a>
+  <!-- <a href="{{ url_for('save_data') }}" class="btn-primary btn">Contribute</a> -->
   <a href="{{ url_for('purge_data') }}" class="btn-primary btn">Done</a>
 
-  <!-- <form method="post">
-    <input type="submit" class="btn" value="Contribute" name="save_data">
-    <input type="submit" class="btn" value="Done" name="purge_data">
-  </form> -->
-
-  <!-- <div class="actions">
-    <input type="button" class="btn" value="Upload Images" onclick="window.location.href='{{ url_for('upload') }}';">
-    <input type="submit" class="btn" value="Launch Image Classifier" id="classify_btn">
-  </div>
-
-  <div style="width: 100%; align-items: center;">
-    <div class='container'>
-      <p>Image classification in progress...</p>
-      <div class='loader'></div>
-      <p id='message'>Thanks for waiting...</p>
-    </div>
-  </div>
-
   <script type="text/javascript">
-    $("#classify_btn").click(function() {
-      $(".container").show();
-      console.log('Clicked');
-    });
-  </script> -->
+    var mapData = {{ data | safe }};
+    console.log(mapData);
+
+    var map;
+
+    function onEachFeature(feature, layer) {
+      if (feature.properties) {
+        label = feature.properties.label
+        confidence = feature.properties.probability*100
+        layer.bindPopup('Species: ' + label + '<br>' +
+                        'Confidence: ' + confidence.toString().substr(0,4) +'%');}}
+
+    function initializePage(){
+      var geojsonMarkerOptions = {
+        radius: 8,
+        fillColor: "#ff7800",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      };
+
+      map = L.map("map").setView([47.389655, -120.272218], 7);
+      L.tileLayer(
+        "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
+        {
+          maxZoom: 18,
+          attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+              '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+              'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          id: "mapbox.light"
+        }
+      ).addTo(map);
+
+      L.geoJSON(mapData, {
+          pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, geojsonMarkerOptions);
+        },
+        onEachFeature: onEachFeature
+      }).addTo(map);
+    };
+    initializePage();
+
+  </script>
 {% endblock %}
