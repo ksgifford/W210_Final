@@ -50,7 +50,11 @@ def exifExtractor(file):
     tags = exifread.process_file(image)
     gpsInfo = {'fileName': image.name.lower().split('/')[-1]}
     for k in ['GPS GPSLatitudeRef', 'GPS GPSLatitude', 'GPS GPSLongitudeRef', 'GPS GPSLongitude']:
-        gpsInfo[k] = str(tags[k])
+        try:
+            gpsInfo[k] = str(tags[k])
+        except KeyError:
+            gpsInfo[k] = 0.0
+        
     return gpsInfo
 
 @app.route('/')
