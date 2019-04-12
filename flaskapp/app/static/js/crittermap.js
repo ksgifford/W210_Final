@@ -1,6 +1,3 @@
-var mapData = {{ data | safe }};
-console.log(mapData);
-
 var map;
 
 function onEachFeature(feature, layer) {

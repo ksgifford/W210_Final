@@ -22,6 +22,10 @@
   <!-- <a href="{{ url_for('save_data') }}" class="btn-primary btn">Contribute</a> -->
   <a href="{{ url_for('purge_data') }}" class="btn-primary btn">Done</a>
 
+  <script type="text/javascript">
+    var mapData = {{ data | safe }};
+    console.log(mapData);
+  </script>
   <script src="{{ url_for('static', filename='js/crittermap.js') }}"></script>
 
 {% endblock %}
