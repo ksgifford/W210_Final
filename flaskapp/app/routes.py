@@ -200,7 +200,7 @@ def output():
 
     df_ConsvNW = pd.read_json(app.config['DOWNLOAD_FOLDER']+'/ConsvNW_species.json', orient='columns')
     df_ConsvNW = df_ConsvNW.loc[df_ConsvNW['Lat']>0]
-    species_all = df_ConsvNW.values.tolist()
+    species_all = df_ConsvNW[['Long','Lat']].values.tolist()
 
     df_bears = df_ConsvNW[df_ConsvNW['label']=='black_bear'][['Long','Lat']]
     bears = df_bears.values.tolist()
