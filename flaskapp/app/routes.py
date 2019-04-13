@@ -195,7 +195,10 @@ def output():
         except Exception as e:
             print(e)
 
-    return render_template('output.html', title='Results Download', data=geojson)
+    with open(app.config['DOWNLOAD_FOLDER']+'/ConsvNW_species.json') as f:
+        consvNW = json.load(f)
+
+    return render_template('output.html', title='Results Download', data=consvNW)
 
 @app.route('/classify')
 @login_required
