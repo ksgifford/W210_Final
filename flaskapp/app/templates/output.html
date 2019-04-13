@@ -24,6 +24,11 @@
 
   <script type="text/javascript">
     var mapData = {{ data[0] | safe }};
+    var speciesAll = {{ data[1] | safe }};
+    var bears = {{ data[2] | safe }};
+    var elkDeer = {{ data[3] | safe }};
+    var coyotes = {{ data[4] | safe }};
+    var cats = {{ data[5] | safe }};
     console.log(mapData);
   </script>
   <script src="{{ url_for('static', filename='js/crittermap.js') }}"></script>

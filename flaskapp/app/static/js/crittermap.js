@@ -30,10 +30,13 @@ function initializePage(){
     }
   ).addTo(map);
 
-  L.geoJSON(mapData, {
-      pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, geojsonMarkerOptions);
-    },
-    onEachFeature: onEachFeature
-  }).addTo(map);
+  var heatAll = L.heatLayer(speciesAll, {radius:12,blur:25,maxZoom:11}).addTo(map);
+
+
+  // L.geoJSON(mapData, {
+  //     pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, geojsonMarkerOptions);
+  //   },
+  //   onEachFeature: onEachFeature
+  // }).addTo(map);
 };
 initializePage();
