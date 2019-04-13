@@ -30,7 +30,7 @@ function initializePage(){
     }
   ).addTo(map);
 
-  var heatAll = L.HeatLayer(speciesAll, {radius:12,blur:25,maxZoom:11}).addTo(map);
+  var heatAll = new.L.HeatLayer(speciesAll, {radius:12,blur:25,maxZoom:11}).addTo(map);
 
 
   // L.geoJSON(mapData, {
