@@ -198,7 +198,25 @@ def output():
     with open(app.config['DOWNLOAD_FOLDER']+'/ConsvNW_species.json') as f:
         consvNW = json.load(f)
 
-    return render_template('output.html', title='Results Download', data=consvNW)
+    df_ConsvNW = pd.read_json(app.config['DOWNLOAD_FOLDER']+'/ConsvNW_species.json', orient='columns')
+    df_ConsvNW = df_ConsvNW.loc[df_ConsvNW['Lat']>0]
+    species_all = df_ConsvNW.values.tolist()
+
+    df_bears = df_ConsvNW[df_ConsvNW['label']=='black_bear'][['Long','Lat']]
+    bears = df_bears.values.tolist()
+
+    df_elkdeer = df_ConsvNW[(df_ConsvNW['label']=='mule_deer')|(df_ConsvNW['label']=='elk')][['Long','Lat']]
+    elk_deer = df_elkdeer.values.tolist()
+
+    df_coyote = df_ConsvNW[df_ConsvNW['label']=='coyote'][['Long','Lat']]
+    coyotes = df_coyote.values.tolist()
+
+    df_cats = df_ConsvNW[(df_ConsvNW['label']=='cougar')|(df_ConsvNW['label']=='bobcat')][['Long','Lat']]
+    cats = df_cats.values.tolist()
+
+    payload = list(geojson,species_all, bears, elk_deer, coyotes, cats)
+
+    return render_template('output.html', title='Results Download', data=payload)
 
 @app.route('/classify')
 @login_required
