@@ -54,7 +54,7 @@ CONTENTS:
 #map {
   height: 500px;
   width: 600px;
-  margin: auto;
+  /* margin: auto; */
 	/* margin-top:40px; */
 	display: inline-block;
 }
@@ -62,7 +62,7 @@ CONTENTS:
 #chart {
 	height: 500px;
 	width: 300px;
-	margin: auto;
+	/* margin: auto; */
 	/* margin-top:40px; */
 	display: inline-block;
 }
