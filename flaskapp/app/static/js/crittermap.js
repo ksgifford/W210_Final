@@ -9,7 +9,7 @@ function onEachFeature(feature, layer) {
 
 function initializePage(){
   var geojsonMarkerOptions = {
-    radius: 8,
+    radius: 4,
     fillColor: "#ff7800",
     color: "#000",
     weight: 1,
@@ -33,10 +33,10 @@ function initializePage(){
   var heatAll = new L.HeatLayer(speciesAll, {radius:16,blur:25,maxZoom:11,minOpacity:0.25}).addTo(map);
 
 
-  // L.geoJSON(mapData, {
-  //     pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, geojsonMarkerOptions);
-  //   },
-  //   onEachFeature: onEachFeature
-  // }).addTo(map);
+  L.geoJSON(mapData, {
+      pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, geojsonMarkerOptions);
+    },
+    onEachFeature: onEachFeature
+  }).addTo(map);
 };
 initializePage();
