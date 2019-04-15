@@ -214,7 +214,9 @@ def output():
     df_cats = df_ConsvNW[(df_ConsvNW['label']=='cougar')|(df_ConsvNW['label']=='bobcat')][['Long','Lat']]
     cats = df_cats.values.tolist()
 
-    payload = [geojson, species_all, bears, elk_deer, coyotes, cats]
+    chart_data = df_output['label'].value_counts().to_json()
+
+    payload = [geojson, species_all, bears, elk_deer, coyotes, cats, chart_data]
 
     return render_template('output.html', title='Results Download', data=payload)
 
