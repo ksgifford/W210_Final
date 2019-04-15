@@ -16,7 +16,7 @@ var svg = d3.select("#chart").append("svg")
 
 var x = d3.scaleLinear()
     .range([0, width])
-    .domain([0, d3.max(charData, function (d) {
+    .domain([0, d3.max(chartData, function (d) {
         return d.value;
     })]);
 
