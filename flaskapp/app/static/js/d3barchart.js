@@ -14,13 +14,13 @@ var svg = d3.select("#chart").append("svg")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var x = d3.scale.linear()
+var x = d3.scaleLinear()
     .range([0, width])
     .domain([0, d3.max(charData, function (d) {
         return d.value;
     })]);
 
-var y = d3.scale.ordinal()
+var y = d3.scaleOrdinal()
     .rangeRoundBands([height, 0], .1)
     .domain(chartData.map(function (d) {
         return d.name;
