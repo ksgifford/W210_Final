@@ -22,9 +22,9 @@ var x = d3.scaleLinear()
 
 var y = d3.scaleBand()
     .range([height, 0])
-    .domain(chartData.map(function (d) {
-        return d.name;
-    }));
+    .domain([chartData, function(d){
+      return d.value;
+    })]);
 
 //make y axis to show bar names
 var yAxis = d3.svg.axis()
