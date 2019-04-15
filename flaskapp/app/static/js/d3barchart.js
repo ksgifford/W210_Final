@@ -27,11 +27,8 @@ var y = d3.scaleBand()
     }]);
 
 //make y axis to show bar names
-var yAxis = d3.svg.axis()
-    .scale(y)
-    //no tick marks
-    .tickSize(0)
-    .orient("left");
+var yAxis = d3.axisLeft(y)
+    .tickSize(0);
 
 var gy = svg.append("g")
     .attr("class", "y axis")
