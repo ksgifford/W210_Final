@@ -45,7 +45,7 @@ bars.append("rect")
     .attr("y", function (d) {
         return y(d.name);
     })
-    .attr("height", y.rangeBand())
+    .attr("height", y.bandwidth())
     .attr("x", 0)
     .attr("width", function (d) {
         return x(d.value);
@@ -56,7 +56,7 @@ bars.append("text")
     .attr("class", "label")
     //y position of the label is halfway down the bar
     .attr("y", function (d) {
-        return y(d.name) + y.rangeBand() / 2 + 4;
+        return y(d.name) + y.bandwidth() / 2 + 4;
     })
     //x position is 3 pixels to the right of the bar
     .attr("x", function (d) {
