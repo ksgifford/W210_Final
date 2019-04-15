@@ -20,8 +20,8 @@ var x = d3.scaleLinear()
         return d.value;
     })]);
 
-var y = d3.scaleOrdinal()
-    .rangeRoundBands([height, 0], .1)
+var y = d3.scaleBand()
+    .range([height, 0])
     .domain(chartData.map(function (d) {
         return d.name;
     }));
