@@ -69,7 +69,10 @@ CONTENTS:
 }
 
 .chart {
-	display: inline-block;
+	/* display: inline-block; */
+	height: 480px;
+	width: 280px;
+	margin: auto;
 }
 
 .chart rect.thing {
