@@ -1,67 +1,43 @@
-var margin = {
-            top: 15,
-            right: 25,
-            bottom: 15,
-            left: 60
-        };
+console.log(chartData);
 
-var width = 300 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var width = 300,
+    barHeight = 20,
+    labelWidth = 60;
 
 var x = d3.scaleLinear()
-    .range([0, width])
-    .domain([0, d3.max(chartData, function (d) {
-        return d.value;
-    })]);
+    .range([0, width - labelWidth])
+    .domain([0, d3.max(chartData.map(function(d){return d.count;}))]);
 
-var y = d3.scaleBand()
-    .range([height, 0])
-    .domain([chartData, function(d){
-      return d.value;
-    }]);
+var chart = d3.select(".chart")
+    .attr("width", width);
 
-//make y axis to show bar names
-var yAxis = d3.axisLeft(y)
-    .tickSize(0);
+var groupspace = 20;
 
-var gy = svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis)
+chart.attr("height", barHeight * (chartData.length + groupspace));
 
-var bars = svg.selectAll(".bar")
-    .data(chartData)
-    .enter()
-    .append("g")
+var bars = chart.selectAll()
+  .data(chartData)
+  .enter().append("g")
+  .attr("transform", function(d, i) { return "translate(" + labelWidth + "," + i * (barHeight + groupspace) + ")"; });
 
-//append rects
 bars.append("rect")
-    .attr("class", "bar")
-    .attr("y", function (d) {
-        return y(d.name);
-    })
-    .attr("height", y.bandwidth())
-    .attr("x", 0)
-    .attr("width", function (d) {
-        return x(d.value);
-    });
+  .attr("class", "thing")
+  .attr("width", function(d) { return x(d.count); })
+  .attr("height", barHeight - 1);
 
-//add a value label to the right of each bar
 bars.append("text")
-    .attr("class", "label")
-    //y position of the label is halfway down the bar
-    .attr("y", function (d) {
-        return y(d.name) + y.bandwidth() / 2 + 4;
-    })
-    //x position is 3 pixels to the right of the bar
-    .attr("x", function (d) {
-        return x(d.value) + 3;
-    })
-    .text(function (d) {
-        return d.value;
-    });
+  .attr("class", "value")
+  .attr("x", function(d) {
+    if(x(d.count)<12){
+      return x(d.count) + 8;
+    } else {return x(d.count) - 3;}})
+  .attr("y", barHeight / 2)
+  .attr("dy", ".35em")
+  .text(function(d) { return d.count; });
+
+bars.append("text")
+  .attr("class", "label")
+  .attr("x", -labelWidth)
+  .attr("y", barHeight/2)
+  .attr("dy", ".35em")
+  .text(function(d) { return d.name; });

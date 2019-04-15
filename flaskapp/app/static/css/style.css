@@ -59,7 +59,7 @@ CONTENTS:
 	display: inline-block;
 }
 
-#chart {
+#chartArea {
 	height: 500px;
 	width: 300px;
 	/* margin: auto; */
@@ -68,26 +68,22 @@ CONTENTS:
 	background-color: white;
 }
 
-svg {
+.chart {
 	display: inline-block;
 }
 
-.bar {
-  fill: #5f89ad;
+.chart rect.thing {
+  fill: steelblue;
 }
 
-.axis {
-  font-size: 13px;
+.chart text.value {
+  fill: black;
+  font: 10px sans-serif;
+  text-anchor: end;
 }
 
-.axis path,
-.axis line {
-  fill: none;
-  display: none;
-}
-
-.label {
-  font-size: 13px;
+.chart text.label {
+  font: 10px sans-serif;
 }
 
 .info {
