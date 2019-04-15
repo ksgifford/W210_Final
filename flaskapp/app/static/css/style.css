@@ -65,6 +65,7 @@ CONTENTS:
 	/* margin: auto; */
 	/* margin-top:40px; */
 	display: inline-block;
+	background-color: white;
 }
 
 svg {
