@@ -1,15 +1,14 @@
 console.log(chartData);
 
 var width = 280,
-    barHeight = 40,
-    labelWidth = 100;
+    barHeight = 30,
+    labelWidth = 120;
 
 var x = d3.scaleLinear()
     .range([0, width - labelWidth])
     .domain([0, d3.max(chartData.map(function(d){return d.count;}))]);
 
-var chart = d3.select(".chart")
-    .attr("width", width);
+var chart = d3.select(".chart");
 
 var groupspace = 20;
 
