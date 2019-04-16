@@ -57,13 +57,14 @@ CONTENTS:
 }
 
 .landing-img {
-	width: 50%;
+	width: 25%;
 	display: inline-block;
 	vertical-align: top;
 }
 
 .landing-img img {
 	display: inline-block;
+
 }
 
 #map {
