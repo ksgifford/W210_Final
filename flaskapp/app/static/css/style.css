@@ -60,6 +60,8 @@ CONTENTS:
 	width: 40%;
 	display: inline-block;
 	vertical-align: top;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .landing-img img {
