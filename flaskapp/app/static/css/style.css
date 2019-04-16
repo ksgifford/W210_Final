@@ -45,19 +45,19 @@ CONTENTS:
 01. General
 ============================================================ */
 .landing {
-	max-width: 75%;
+	max-width: 80%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
 .landing-text {
-	width: 50%;
+	width: 40%;
 	display: inline-block;
 	vertical-align: top;
 }
 
 .landing-img {
-	width: 25%;
+	width: 40%;
 	display: inline-block;
 	vertical-align: top;
 }
