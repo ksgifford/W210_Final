@@ -10,11 +10,11 @@ function onEachFeature(feature, layer) {
 function initializePage(){
   var geojsonMarkerOptions = {
     radius: 4,
-    fillColor: "#ff7800",
+    fillColor: "steelblue",
     color: "#000",
     weight: 1,
     opacity: 1,
-    fillOpacity: 0.8
+    fillOpacity: 1.0
   };
 
   map = L.map("map").setView([47.439260, -121.253771], 8);
