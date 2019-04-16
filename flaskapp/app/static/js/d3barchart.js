@@ -12,7 +12,7 @@ var chart = d3.select(".chart");
 
 var groupspace = 20;
 
-chart.attr("height", barHeight * (chartData.length + groupspace));
+// chart.attr("height", barHeight * (chartData.length + groupspace));
 
 var bars = chart.selectAll()
   .data(chartData)
