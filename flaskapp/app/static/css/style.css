@@ -51,8 +51,8 @@ CONTENTS:
 }
 
 .landing-text {
-	width: 40%;
-	display: inline-block;
+	/* width: 40%; */
+	/* display: inline-block; */
 	vertical-align: top;
 }
 
