@@ -21,8 +21,11 @@ var bars = chart.selectAll()
 
 bars.append("rect")
   .attr("class", "thing")
-  .attr("width", function(d) { return x(d.count); })
-  .attr("height", barHeight - 1);
+  .attr("width", 0)
+  .attr("height", barHeight - 1)
+  .transition()
+    .duration(1500)
+    .attr("width", function(d) { return x(d.count); });
 
 bars.append("text")
   .attr("class", "value")
@@ -36,7 +39,7 @@ bars.append("text")
 
 bars.append("text")
   .attr("class", "label")
-  .attr("x", -labelWidth)
+  .attr("x", -6)
   .attr("y", barHeight/2)
   .attr("dy", ".35em")
   .text(function(d) { return d.name; });
