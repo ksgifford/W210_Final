@@ -82,7 +82,7 @@ CONTENTS:
 
 .chart text.label {
   font: 12px sans-serif;
-	tex-anchor: end;
+	text-anchor: end;
 }
 
 .info {
