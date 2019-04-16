@@ -52,10 +52,14 @@ CONTENTS:
 
 .landing-text {
 	max-width: 50%;
+	display: inline-block;
+	vertical-align: top;
 }
 
 .landing-img {
 	max-width: 50%;
+	display: inline-block;
+	vertical-align: top;
 }
 
 #map {
