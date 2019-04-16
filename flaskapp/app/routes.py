@@ -63,7 +63,7 @@ def exifExtractor(file):
 @app.route('/')
 @app.route('/index')
 def index():
-    return redirect(url_for('login'))
+    return render_template('index.html', title='Home')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -80,7 +80,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('upload')
         return redirect(next_page)
-    return render_template('index.html', title='Home', form=form)
+    return render_template('login_page.html', title='Sign In', form=form)
 
 @app.route('/logout')
 def logout():

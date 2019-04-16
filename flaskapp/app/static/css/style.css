@@ -44,6 +44,19 @@ CONTENTS:
 /* =========================================================
 01. General
 ============================================================ */
+.landing {
+	max-width: 75%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.landing-text {
+	max-width: 50%;
+}
+
+.landing-img {
+	max-width: 50%;
+}
 
 #map {
   height: 500px;
