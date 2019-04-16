@@ -85,6 +85,12 @@ CONTENTS:
 	text-anchor: end;
 }
 
+.chartTitle {
+	font: 18px sans-serif;
+  font-weight: bold;
+  text-align: center;
+}
+
 .info {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
