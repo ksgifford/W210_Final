@@ -10,7 +10,7 @@ function onEachFeature(feature, layer) {
 function initializePage(){
   var geojsonMarkerOptions = {
     radius: 4,
-    fillColor: "steelblue",
+    fillColor: "DarkTurquoise",
     color: "#000",
     weight: 1,
     opacity: 1,
