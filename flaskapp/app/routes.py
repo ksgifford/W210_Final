@@ -229,16 +229,16 @@ def output():
     df_ConsvNW = df_ConsvNW.loc[df_ConsvNW['Lat']>0]
     species_all = df_ConsvNW[['Lat','Long']].values.tolist()
 
-    df_bears = df_ConsvNW[df_ConsvNW['label']=='black_bear'][['Long','Lat']]
+    df_bears = df_ConsvNW[df_ConsvNW['label']=='black_bear'][['Lat','Long']]
     bears = df_bears.values.tolist()
 
-    df_elkdeer = df_ConsvNW[(df_ConsvNW['label']=='mule_deer')|(df_ConsvNW['label']=='elk')][['Long','Lat']]
+    df_elkdeer = df_ConsvNW[(df_ConsvNW['label']=='mule_deer')|(df_ConsvNW['label']=='elk')][['Lat','Long']]
     elk_deer = df_elkdeer.values.tolist()
 
-    df_coyote = df_ConsvNW[df_ConsvNW['label']=='coyote'][['Long','Lat']]
+    df_coyote = df_ConsvNW[df_ConsvNW['label']=='coyote'][['Lat','Long']]
     coyotes = df_coyote.values.tolist()
 
-    df_cats = df_ConsvNW[(df_ConsvNW['label']=='cougar')|(df_ConsvNW['label']=='bobcat')][['Long','Lat']]
+    df_cats = df_ConsvNW[(df_ConsvNW['label']=='cougar')|(df_ConsvNW['label']=='bobcat')][['Lat','Long']]
     cats = df_cats.values.tolist()
 
     df_chartData = pd.DataFrame(df_output['label'].value_counts()).reset_index()
