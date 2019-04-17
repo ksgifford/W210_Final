@@ -30,13 +30,30 @@ function initializePage(){
     }
   ).addTo(map);
 
-  var heatAll = new L.HeatLayer(speciesAll, {radius:16,blur:25,maxZoom:11,minOpacity:0.25}).addTo(map);
+  var heatAll = new L.HeatLayer(speciesAll, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
+  var heatBears = new L.HeatLayer(bears, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
+  var heatDeer = new L.HeatLayer(elkDeer, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
+  var heatCoyotes = new L.HeatLayer(coyotes, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
+  var heatCats = new L.HeatLayer(cats, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
 
+  var baseMaps = {
+    "All Species": heatAll,
+    "Bears": heatBears,
+    "Deer & Elk": heatDeer,
+    "Coyotes": heatCoyotes,
+    "Bobcats & Cougars": heatCats
+  };
 
-  L.geoJSON(mapData, {
+  var userPoints = L.geoJSON(mapData, {
       pointToLayer: function (feature, latlng) {return L.circleMarker(latlng, geojsonMarkerOptions);
     },
     onEachFeature: onEachFeature
-  }).addTo(map);
+  });
+
+  var overlayMap = {
+    "User Images": userPoints
+  };
+
+  L.control.layers(baseMaps, overlayMap).addTo(map);
 };
 initializePage();
