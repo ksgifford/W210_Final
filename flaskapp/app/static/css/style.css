@@ -77,8 +77,8 @@ CONTENTS:
 	display: inline-block;
 }
 
-.leaflet-control-layers-base {
-	display: block;
+.leaflet-control-layers-list {
+	text-align: left;
 }
 
 #chartArea {
