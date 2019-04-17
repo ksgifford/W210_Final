@@ -304,7 +304,8 @@ body, input, textarea {
 }
 
 a {
-  color: #454545;
+  /* color: #454545; */
+	color: steelblue;
   text-decoration: none;
 }
 
