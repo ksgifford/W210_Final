@@ -60,7 +60,7 @@ CONTENTS:
 	width: 40%;
 	display: inline-block;
 	vertical-align: top;
-	margin-top: 20px;
+	/* margin-top: 20px; */
 	margin-bottom: 20px;
 }
 
@@ -76,20 +76,20 @@ CONTENTS:
 }
 
 .bioFooter {
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 }
 
 .bioBox {
 	vertical-align: top;
 	display: inline-block;
 	width: 25%;
-	margin-bottom: 12px;
+	margin-bottom: 20px;
 }
 
 .bioBox p {
 	text-align: justify;
-	margin-left: 6px;
-	margin-right: 6px;
+	margin-left: 12px;
+	margin-right: 12px;
 }
 
 .bio {
