@@ -75,14 +75,21 @@ CONTENTS:
 	margin-right: auto;
 }
 
+.bioFooter {
+	margin-bottom: 20px;
+}
+
 .bioBox {
 	vertical-align: top;
 	display: inline-block;
 	width: 25%;
+	margin-bottom: 12px;
 }
 
 .bioBox p {
 	text-align: justify;
+	margin-left: 6px;
+	margin-right: 6px;
 }
 
 .bio {
@@ -164,6 +171,7 @@ CONTENTS:
 	text-align: justify;
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 20px;
 }
 
 .formLabel {
