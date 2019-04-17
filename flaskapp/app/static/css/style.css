@@ -77,11 +77,6 @@ CONTENTS:
 	display: inline-block;
 }
 
-#map canvas {
-	position: relative;
-	
-}
-
 #chartArea {
 	height: 500px;
 	width: 300px;

@@ -30,7 +30,7 @@ function initializePage(){
     }
   ).addTo(map);
 
-  var heatAll = new L.HeatLayer(speciesAll, {radius:16,blur:25,maxZoom:11,minOpacity:0.25}).addTo(map);
+  var heatAll = new L.HeatLayer(speciesAll, {radius:16,blur:25,maxZoom:11,minOpacity:0.25,gradient : {1: 'red'}}).addTo(map);
   var heatBears = new L.HeatLayer(bears, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
   var heatDeer = new L.HeatLayer(elkDeer, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
   var heatCoyotes = new L.HeatLayer(coyotes, {radius:16,blur:25,maxZoom:11,minOpacity:0.25});
