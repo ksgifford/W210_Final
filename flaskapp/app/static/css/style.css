@@ -81,6 +81,10 @@ CONTENTS:
 	text-align: left;
 }
 
+.leaflet-control-layers-list input {
+	vertical-align: top;
+}
+
 #chartArea {
 	height: 500px;
 	width: 300px;
