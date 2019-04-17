@@ -78,7 +78,7 @@ def formatLabel(x):
     elif x == 'wild_turkey':
         return 'Wild turkey'
     elif x == 'red_deer':
-        return 'Red deer'
+        return 'Elk'
     else:
         return x.capitalize()
 
@@ -86,6 +86,10 @@ def formatLabel(x):
 @app.route('/index')
 def index():
     return render_template('index.html', title='Home')
+
+@app.route('/about')
+def about():
+    return render_template('about.html', title='About Us')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

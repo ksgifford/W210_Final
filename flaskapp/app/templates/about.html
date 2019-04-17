@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>About Our Team</h2>
+  <p></p>
+  <h2>Privacy Policy</h2>
+  <p>Photos uploaded to CritterCounter are held on a private S3 bucket on Amazon
+    Web Services. Users have the option to purge their data after classification,
+    entirely removing it from CritterCounter databases and file storage. If desired,
+    photos can be shared as open source and to help build out species range
+    maps and add to our classification training data set.</p>
+  <h2>Acknowledgements</h2>
+  <p>CritterCounter relies on publicly available datasets to train their machine
+    vision models (<a href="http://lila.science/datasets/nacti">NACTI</a>,
+    <a href="https://beerys.github.io/CaltechCameraTraps/">CalTech</a>), as well
+    as images from consenting users of the website to improve our model over time.
+    <a href="https://www.conservationnw.org/">ConservationNW</a> provided invaluable
+    test data to validate our model’s effectiveness in Washington State and is
+    the source of the copyrighted photos used on this website.</p>
+
+{% endblock %}
