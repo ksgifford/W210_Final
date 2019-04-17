@@ -60,6 +60,26 @@ def exifExtractor(file):
 
     return gpsInfo
 
+def formatLabel(x):
+    if x == 'american_black_bear':
+        return 'Black bear'
+    elif x == 'domestic_cow':
+        return 'Cow'
+    elif x == 'domestic_dog':
+        return 'Dog'
+    elif x == 'gray_fox':
+        return 'Gray fox'
+    elif x == 'red_fox':
+        return 'Red fox'
+    elif x == 'white_tailed_deer':
+        return 'White-tailed deer'
+    elif x == 'mule_deer':
+        return 'Mule deer'
+    elif x == 'wild_turkey':
+        return 'Wild turkey'
+    else:
+        return x.capitalize()
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -171,6 +191,7 @@ def output():
     dfGPS = pd.read_csv(app.config['DOWNLOAD_FOLDER']+current_user.username+'/geotags.csv')
     df_output = pd.merge(df_resTransform, dfGPS, on='fileName')
     df_output = df_output[['fileName', 'label', 'probability', 'userId', 'Lat', 'Long']]
+    df_output['label'] = df_output['label'].apply(formatLabel)
     geojson = df_to_geojson(df_output, df_output.columns)
     json_filename = app.config['DOWNLOAD_FOLDER']+current_user.username+'/species.json'
     with open(json_filename, 'w') as f:
