@@ -77,6 +77,8 @@ def formatLabel(x):
         return 'Mule deer'
     elif x == 'wild_turkey':
         return 'Wild turkey'
+    elif x == 'red_deer':
+        return 'Red deer'
     else:
         return x.capitalize()
 

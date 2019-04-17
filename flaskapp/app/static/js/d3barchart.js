@@ -2,7 +2,7 @@ console.log(chartData);
 
 var width = 280,
     barHeight = 30,
-    labelWidth = 120;
+    labelWidth = 80;
 
 var x = d3.scaleLinear()
     .range([0, width - labelWidth])
