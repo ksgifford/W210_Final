@@ -77,6 +77,11 @@ CONTENTS:
 	display: inline-block;
 }
 
+.leaflet-control-layers-selector {
+	position: absolute;
+	left: 4px;
+}
+
 #chartArea {
 	height: 500px;
 	width: 300px;
