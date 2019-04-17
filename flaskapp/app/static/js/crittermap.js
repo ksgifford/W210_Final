@@ -17,7 +17,7 @@ function initializePage(){
     fillOpacity: 1.0
   };
 
-  map = L.map("map").setView([47.439260, -121.253771], 8);
+  map = L.map("map").setView([47.420316, -120.350371], 7);
   L.tileLayer(
     "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw",
     {
