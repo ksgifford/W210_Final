@@ -77,9 +77,8 @@ CONTENTS:
 	display: inline-block;
 }
 
-.leaflet-control-layers-selector {
-	position: absolute;
-	left: 4px;
+.leaflet-control-layers-base {
+	display: block;
 }
 
 #chartArea {
