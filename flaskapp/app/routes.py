@@ -43,10 +43,23 @@ def gpsParser(x):
         return 0.0
     else:
         degrees = int(x[1:-1].split(',')[0])
-        minNumerator = int(x[1:-1].split(',')[1].split('/')[0])
-        minDenominator = int(x[1:-1].split(',')[1].split('/')[1])
+        try:
+            minNumerator = int(x[1:-1].split(',')[1].split('/')[0])
+            minDenominator = int(x[1:-1].split(',')[1].split('/')[1])
+        except IndexError:
+            minNumerator = int(x[1:-1].split(',')[1].split('/')[0])
+            minDenominator = 1.0
+
+        try:
+            secNumerator = int(x[1:-1].split(',')[2].split('/')[0])
+            secDenominator = int(x[1:-1].split(',')[2].split('/')[1])
+        except IndexError:
+            secNumerator = int(x[1:-1].split(',')[2].split('/')[0])
+            secDenominator = 1.0
+
         deciMinutes = minNumerator/minDenominator/60
-        return(np.round(degrees+deciMinutes,6))
+        deciSeconds = secNumerator/secDenominator/3600
+        return(np.round(degrees+deciMinutes+deciSeconds,6))
 
 def exifExtractor(file):
     image = open(file, 'rb')
