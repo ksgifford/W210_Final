@@ -95,6 +95,17 @@ def formatLabel(x):
     else:
         return x.capitalize()
 
+def purge_local(dir):
+    excepts = []
+    for file in os.listdir(dir):
+        file_path = os.path.join(dir,file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            excepts.append(e)
+    return excepts
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -129,13 +140,21 @@ def logout():
 @app.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
+    check_file = app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_results.csv'
+    if os.path.isfile(check_file):
+        purge_local(os.path.join(app.config['DOWNLOAD_FOLDER'],current_user.username))
+
     if request.method == 'POST':
         data_files = request.files.getlist('file[]')
         for data_file in data_files:
-            filename_old = current_user.username+'/upload/'+data_file.filename
-            filename_new = filename_old.lower()
-            s3_client.upload_fileobj(data_file, bucket_name, filename_new)
-            print("Uploading "+data_file.filename+" to "+bucket_name+".")
+            name, ext = os.path.splitext(data_file)
+            if ext.lower() in [".jpg",".jpeg",".png"]:
+                filename_old = current_user.username+'/upload/'+data_file.filename
+                filename_new = filename_old.lower()
+                s3_client.upload_fileobj(data_file, bucket_name, filename_new)
+                print("Uploading "+data_file.filename+" to "+bucket_name+".")
+            else:
+                pass
 
         upload_dir = '/home/ubuntu/s3bucket/'+current_user.username+'/upload/'
         dfGPSRaw =  pd.DataFrame()
@@ -306,12 +325,6 @@ def purge_data():
     connection.close()
     engine.dispose()
     purge_dir = os.path.join(app.config['DOWNLOAD_FOLDER'],current_user.username)
-    for file in os.listdir(purge_dir):
-        file_path = os.path.join(purge_dir,file)
-        try:
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        except Exception as e:
-            print(e)
+    purge_local(purge_dir)
 
     return redirect(url_for('index'))
