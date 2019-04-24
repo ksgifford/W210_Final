@@ -147,7 +147,7 @@ def upload():
     if request.method == 'POST':
         data_files = request.files.getlist('file[]')
         for data_file in data_files:
-            name, ext = os.path.splitext(data_file)
+            name, ext = os.path.splitext(data_file.filename)
             if ext.lower() in [".jpg",".jpeg",".png"]:
                 filename_old = current_user.username+'/upload/'+data_file.filename
                 filename_new = filename_old.lower()
