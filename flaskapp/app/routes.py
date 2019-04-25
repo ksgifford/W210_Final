@@ -247,23 +247,25 @@ def output():
     session.close()
     engine.dispose()
 
-    file_prefix = current_user.username+'/wtf'
-    file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
-    img_dir = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img'
-    for obj in file_list:
-        local_file_name = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img/'+obj.key.split('/')[2]
-        my_bucket.download_file(obj.key,local_file_name)
+    wtf_path = '/home/ubuntu/w210-img-upload/'+current_user.username+'/wtf'
+
+    # file_prefix = current_user.username+'/wtf'
+    # file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
+    # img_dir = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img'
+    # for obj in file_list:
+    #     local_file_name = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img/'+obj.key.split('/')[2]
+    #     my_bucket.download_file(obj.key,local_file_name)
 
     wtf_dir = app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_WTFimages'
 
-    shutil.make_archive(wtf_dir,'zip',img_dir)
-    for file in os.listdir(img_dir):
-        file_path = os.path.join(img_dir,file)
-        try:
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-        except Exception as e:
-            print(e)
+    shutil.make_archive(wtf_dir,'zip',wtf_path)
+    # for file in os.listdir(wtf_path):
+    #     file_path = os.path.join(wtf_path,file)
+    #     try:
+    #         if os.path.isfile(file_path):
+    #             os.remove(file_path)
+    #     except Exception as e:
+    #         print(e)
 
     with open(app.config['DOWNLOAD_FOLDER']+'/ConsvNW_species.json') as f:
         consvNW = json.load(f)
