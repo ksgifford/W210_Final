@@ -97,6 +97,15 @@ def formatLabel(x):
 
 def purge_local(dir):
     excepts = []
+    prefix = current_user.username+'/'
+    my_bucket.objects.filter(Prefix=prefix).delete()
+
+    engine = create_engine(db_string, echo=True)
+    connection = engine.connect()
+    connection.execute("DROP TABLE IF EXISTS {}".format('test_upload'))
+    connection.close()
+    engine.dispose()
+
     for file in os.listdir(dir):
         file_path = os.path.join(dir,file)
         try:
@@ -245,7 +254,9 @@ def output():
         local_file_name = app.config['DOWNLOAD_FOLDER']+current_user.username+'/img/'+obj.key.split('/')[2]
         my_bucket.download_file(obj.key,local_file_name)
 
-    shutil.make_archive(app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_WTFimages','zip',img_dir)
+    wtf_dir = app.config['DOWNLOAD_FOLDER']+current_user.username+'/'+current_user.username+'_WTFimages'
+
+    shutil.make_archive(wtf_dir,'zip',img_dir)
     for file in os.listdir(img_dir):
         file_path = os.path.join(img_dir,file)
         try:
@@ -317,13 +328,6 @@ def save_data():
 @app.route('/purge_data')
 @login_required
 def purge_data():
-    prefix = current_user.username+'/'
-    my_bucket.objects.filter(Prefix=prefix).delete()
-    engine = create_engine(db_string, echo=True)
-    connection = engine.connect()
-    connection.execute("DROP TABLE IF EXISTS {}".format('test_upload'))
-    connection.close()
-    engine.dispose()
     purge_dir = os.path.join(app.config['DOWNLOAD_FOLDER'],current_user.username)
     purge_local(purge_dir)
 
