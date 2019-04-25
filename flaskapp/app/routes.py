@@ -247,7 +247,7 @@ def output():
     session.close()
     engine.dispose()
 
-    wtf_path = '/home/ubuntu/w210-img-upload/'+current_user.username+'/wtf'
+    wtf_path = '/home/ubuntu/s3bucket/'+current_user.username+'/wtf'
 
     # file_prefix = current_user.username+'/wtf'
     # file_list = list(my_bucket.objects.filter(Prefix=file_prefix))[1:]
